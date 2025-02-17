@@ -6,16 +6,20 @@
 const TCHAR CLASS_NAME[] = L"MainWndClass";
 const TCHAR WINDOW_TITLE[] = L"My first window";
 
-DWORD g_lastTick;
-UINT_PTR g_timerId = 0;
-
-
 const int GRAVITY = 13;  
 const int SPEED = 50; 
 
-double t1 = 2.0; 
-double t2 = 1.0; 
-double t3 = 0.0; 
+struct AnimationState
+{
+	double t1;
+	double t2;
+	double t3;
+	DWORD lastTick;
+	UINT_PTR timerId;
+	int offsetG;
+	int offsetO;
+	int offsetI; 
+};
 
 enum
 {
@@ -108,7 +112,7 @@ void OnDestroy(HWND hWnd)
 	PostQuitMessage(0);
 }
 
-void OnPaint(HWND hwnd)
+void OnPaint(HWND hwnd, const AnimationState& state)
 {
 	PAINTSTRUCT ps;
 	HDC dc = BeginPaint(hwnd, &ps);
@@ -142,41 +146,37 @@ void OnPaint(HWND hwnd)
 	HPEN pen = CreatePen(PS_NULL, 0, 0);
 	HPEN oldPen = SelectPen(dc, pen);
 
-	int offsetG = SPEED * t1 - 0.5 * GRAVITY * t1 * t1;
-	int offsetO = SPEED * t2 - 0.5 * GRAVITY * t2 * t2;
-	int offsetI = SPEED * t3 - 0.5 * GRAVITY * t3 * t3;
-
 	// Г
 	POINT pointsG[] = {
-		{100, 100 - offsetG},
-		{175, 100 - offsetG},
-		{175, 120 - offsetG},
-		{120, 120 - offsetG},
-		{120, 200 - offsetG},
-		{100, 200 - offsetG}
+		{100, 100 - state.offsetG},
+		{175, 100 - state.offsetG},
+		{175, 120 - state.offsetG},
+		{120, 120 - state.offsetG},
+		{120, 200 - state.offsetG},
+		{100, 200 - state.offsetG}
 	};
 	Polygon(dc, pointsG, 6);
 	DeleteBrush(blueBrush);
 
 	// O
 	SelectBrush(dc, greenBrush);
-	Rectangle(dc, 200, 100 - offsetO, 280, 200 - offsetO);
+	Rectangle(dc, 200, 100 - state.offsetO, 280, 200 - state.offsetO);
 	HBRUSH whiteBrush = CreateSolidBrush(RGB(255, 255, 255));
 	SelectBrush(dc, whiteBrush);
-	Rectangle(dc, 220, 120 - offsetO, 260, 180 - offsetO);
+	Rectangle(dc, 220, 120 - state.offsetO, 260, 180 - state.offsetO);
 	DeleteBrush(whiteBrush);
 
 	// И
 	SelectBrush(dc, redBrush);
-	Rectangle(dc, 300, 100 - offsetI, 320, 200 - offsetI);
-	Rectangle(dc, 360, 100 - offsetI, 380, 200 - offsetI);
+	Rectangle(dc, 300, 100 - state.offsetI, 320, 200 - state.offsetI);
+	Rectangle(dc, 360, 100 - state.offsetI, 380, 200 - state.offsetI);
 	// Рисуем наклонный прямоугольник (диагональная линия)
 	// Для этого используем многоугольник (Polygon)
 	POINT points[] = {
-		{318, 198 - offsetI},
-		{318, 175 - offsetI},
-		{360, 100 - offsetI},
-		{360, 125 - offsetI}
+		{318, 198 - state.offsetI},
+		{318, 175 - state.offsetI},
+		{360, 100 - state.offsetI},
+		{360, 125 - state.offsetI}
 	};
 	Polygon(dc, points, 4);
 	DeleteBrush(greenBrush);
@@ -191,48 +191,57 @@ void OnPaint(HWND hwnd)
 	EndPaint(hwnd, &ps);
 }
 
-void Animate(HWND hwnd)
+void Animate(HWND hwnd, AnimationState& state)
 {
 	// Определяем промежуток времени (в миллисекундах)
 	DWORD currentTick = GetTickCount();
-	int delta = currentTick - g_lastTick;
-	g_lastTick = currentTick;
+	int delta = currentTick - state.lastTick;
+	state.lastTick = currentTick;
 
 	// Разница по времени в секундах
 	double deltaSeconds = delta * 0.001;
 
-	t1 += deltaSeconds;
-	t2 += deltaSeconds;
-	t3 += deltaSeconds;
+	state.t1 += deltaSeconds;
+	state.t2 += deltaSeconds;
+	state.t3 += deltaSeconds;
+	// Ut - 0.5gt^2
+	state.offsetG = SPEED * state.t1 - 0.5 * GRAVITY * state.t1 * state.t1;
+	state.offsetO = SPEED * state.t2 - 0.5 * GRAVITY * state.t2 * state.t2;
+	state.offsetI = SPEED * state.t3 - 0.5 * GRAVITY * state.t3 * state.t3;
 
 	// сбрасываем время Ut - 0.5gt^2
-	if (SPEED * t1 - 0.5 * GRAVITY * t1 * t1 < 0) t1 = 0.0;
-	if (SPEED * t2 - 0.5 * GRAVITY * t2 * t2 < 0) t2 = 0.0;
-	if (SPEED * t3 - 0.5 * GRAVITY * t3 * t3 < 0) t3 = 0.0;
+	if (state.offsetG < 0) state.t1 = 0.0;
+	if (state.offsetO < 0) state.t2 = 0.0;
+	if (state.offsetI < 0) state.t3 = 0.0;
 
 	// Перерисовываем окно
 	InvalidateRect(hwnd, NULL, TRUE);
 	UpdateWindow(hwnd);
 }
 
-void OnTimer(HWND hwnd, UINT id)
+void OnTimer(HWND hwnd, UINT id, AnimationState& state)
 {
 	switch (id)
 	{
 	case ANIMATION_TIMER_ID:
-		Animate(hwnd);
+		Animate(hwnd, state);
 		break;
 	}
 }
 
-BOOL OnCreate(HWND hwnd, LPCREATESTRUCT /*lpCreateStruct*/)
+BOOL OnCreate(HWND hwnd, LPCREATESTRUCT /*lpCreateStruct*/, AnimationState& state)
 {
 	// запоминаем текущее значение счетчика миллисекунд
-	g_lastTick = GetTickCount();
+	state.lastTick = GetTickCount();
+	state.timerId = SetTimer(hwnd, ANIMATION_TIMER_ID, 20, NULL);
+	state.t1 = 2.0;
+	state.t2 = 1.0;
+	state.t3 = 0.0;
+	state.offsetG = 0;
+	state.offsetO = 0;
+	state.offsetI = 0;
 
-	g_timerId = SetTimer(hwnd, ANIMATION_TIMER_ID, 20, NULL);
-
-	return (g_timerId != 0);
+	return (state.timerId != 0);
 }
 
 LRESULT CALLBACK WndProc(
@@ -241,12 +250,28 @@ LRESULT CALLBACK WndProc(
 	WPARAM wParam,
 	LPARAM lParam)
 {
+	static AnimationState state;
+
 	switch (uMsg)
 	{
-		HANDLE_MSG(hwnd, WM_DESTROY, OnDestroy);
-		HANDLE_MSG(hwnd, WM_PAINT, OnPaint);
-		HANDLE_MSG(hwnd, WM_TIMER, OnTimer);
-		HANDLE_MSG(hwnd, WM_CREATE, OnCreate);
+	case WM_PAINT:
+		OnPaint(hwnd, state);
+		return 0;
+
+	case WM_TIMER:
+		OnTimer(hwnd, (UINT)wParam, state);
+		return 0;
+
+	case WM_CREATE:
+		if (!OnCreate(hwnd, (LPCREATESTRUCT)lParam, state))
+		{
+			return -1;
+		}
+		return 0;
+
+	case WM_DESTROY:
+		OnDestroy(hwnd);
+		return 0;
 	}
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
