@@ -34,11 +34,14 @@ private:
 	POINT m_lastPoint;
 	int m_offsetX;
 	int m_offsetY;
+	bool m_isPNG = false;
+
 	LRESULT OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnEraseBkgnd(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	void DrawCheckerboardBackground(Gdiplus::Graphics& g, int width, int height);
 public:
 	void ClosePicture(void);
 };

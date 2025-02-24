@@ -42,6 +42,11 @@ bool CView::OpenPicture(std::wstring const& fileName)
 		m_pPicture.reset(new Bitmap(img.GetWidth(), img.GetHeight(), PixelFormat32bppARGB));
 
 		Graphics g(m_pPicture.get());
+
+		std::wstring ext = fileName.substr(fileName.find_last_of(L".") + 1);
+		std::transform(ext.begin(), ext.end(), ext.begin(), ::towlower);
+		m_isPNG = (ext == L"png");
+
 		g.DrawImage(&img, 0, 0);
 
 		InvalidateRect(NULL);
@@ -129,8 +134,31 @@ void CView::RedrawBackBuffer(void)
 
 	g.Clear(Color(0xdd, 0xdd, 0xdd));
 
+	if (m_isPNG)
+	{
+		DrawCheckerboardBackground(g, rc.Width(), rc.Height());
+	}
+
 	if (m_pPicture.get())
 	{
 		g.DrawImage(m_pPicture.get(), m_offsetX, m_offsetY); 
+	}
+}
+
+void CView::DrawCheckerboardBackground(Gdiplus::Graphics& g, int width, int height)
+{
+	const int tileSize = 20;
+	Gdiplus::Color color1(0xFF, 0xCC, 0xCC, 0xCC); 
+	Gdiplus::Color color2(0xFF, 0xEE, 0xEE, 0xEE);
+
+	for (int y = 0; y < height; y += tileSize)
+	{
+		for (int x = 0; x < width; x += tileSize)
+		{
+			Gdiplus::Color color = ((x / tileSize + y / tileSize) % 2 == 0) ? color1 : color2;
+			Gdiplus::SolidBrush brush(color);
+
+			g.FillRectangle(&brush, x, y, tileSize, tileSize);
+		}
 	}
 }
