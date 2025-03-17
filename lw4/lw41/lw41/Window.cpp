@@ -132,7 +132,7 @@ void Window::OnRunStart()
 	glEnable(GL_DEPTH_TEST);
 
 	// Направление на источник света (совпадает с позицией наблюдателя)
-	DirectLight light{ { 0.0f, 0.0f, 1.0f } };
+	DirectLight light{ { 0.0f, 0.0f, 1.0f} };
 	light.SetDiffuseIntensity({ 0.5f, 0.5f, 0.5f, 1.0f });
 	light.SetAmbientIntensity({ 0.0f, 0.0f, 0.0f, 1.0f });
 	light.SetSpecularIntensity({ 0.3f, 0.3f, 0.3f, 1.0f });
