@@ -9,7 +9,7 @@ public:
     void Draw() const;
 
 private:
-    // x
+    // x 
     float m_width;
     // y
     float m_depth;

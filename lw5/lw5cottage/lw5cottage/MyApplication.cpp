@@ -6,7 +6,7 @@
 const double CMyApplication::ZNEAR = 0.1;
 // Расстояние до дальей плоскости отсечения отображаемого объема
 const double CMyApplication::ZFAR = 200;
-// Угол обзора по вертикали
+// Угол обзора по вертикалиa
 const double CMyApplication::FIELD_OF_VIEW = 70;
 
 CMyApplication::CMyApplication(const char* title, int width, int height)

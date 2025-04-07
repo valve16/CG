@@ -18,10 +18,10 @@ void Cottage::Draw() const
 {
     glEnable(GL_TEXTURE_2D);
 
-    // Стены
+    // РЎС‚РµРЅС‹
     glBindTexture(GL_TEXTURE_2D, m_brickTexture);
 
-    //передняя стена
+    //РїРµСЂРµРґРЅСЏСЏ СЃС‚РµРЅР° 
     glBegin(GL_POLYGON);
     {
         CVector3f p0(-m_width / 2, m_depth / 2, 0);
@@ -39,7 +39,7 @@ void Cottage::Draw() const
     }
     glEnd();
 
-    //задняя стена
+    //Р·Р°РґРЅСЏСЏ СЃС‚РµРЅР°
     glBegin(GL_POLYGON);
     {
         CVector3f p0(-m_width / 2, -m_depth / 2, 0);
@@ -57,7 +57,7 @@ void Cottage::Draw() const
     }
     glEnd();
 
-    //справа от входа
+    //СЃРїСЂР°РІР° РѕС‚ РІС…РѕРґР°
     glBegin(GL_POLYGON);
     {
         CVector3f p0(-m_width / 2, -m_depth / 2, 0);
@@ -76,7 +76,7 @@ void Cottage::Draw() const
     glEnd();
 
 
-    //слева от входа
+    //СЃР»РµРІР° РѕС‚ РІС…РѕРґР°
     glBegin(GL_POLYGON);
     {
         CVector3f p0(m_width / 2, -m_depth / 2, 0);
@@ -94,7 +94,7 @@ void Cottage::Draw() const
     glEnd();
 
     glBindTexture(GL_TEXTURE_2D, m_sideTexture);
-    // фронт справа
+    // С„СЂРѕРЅС‚ СЃРїСЂР°РІР°
     glBegin(GL_POLYGON);
     {
         CVector3f p0(-m_width / 2 , -m_depth / 2, m_height);
@@ -111,7 +111,7 @@ void Cottage::Draw() const
     glEnd();
 
 
-    // фронт слева
+    // С„СЂРѕРЅС‚ СЃР»РµРІР°
     glBegin(GL_POLYGON);
     {
         CVector3f p0(m_width / 2, m_depth / 2, m_height);
@@ -127,7 +127,7 @@ void Cottage::Draw() const
     }
     glEnd();
 
-    // Крыша (передний скат)
+    // РљСЂС‹С€Р° (РїРµСЂРµРґРЅРёР№ СЃРєР°С‚)
     glBindTexture(GL_TEXTURE_2D, m_roofTexture);
     glBegin(GL_POLYGON);
     {
@@ -135,7 +135,7 @@ void Cottage::Draw() const
         CVector3f p1(-m_width / 2, m_depth / 2, m_height);
         CVector3f p2(m_width / 2, m_depth / 2, m_height);
         CVector3f p3(m_width / 2, 0, m_height * 1.5);
-        // Вычисляем нормаль
+        // Р’С‹С‡РёСЃР»СЏРµРј РЅРѕСЂРјР°Р»СЊ
         CVector3f v1 = p1 - p0;
         CVector3f v2 = p2 - p0;
         CVector3f normal = Cross(v2, v1); 
@@ -149,7 +149,7 @@ void Cottage::Draw() const
     }
     glEnd();
 
-    // Крыша (задний скат)
+    // РљСЂС‹С€Р° (Р·Р°РґРЅРёР№ СЃРєР°С‚)
     glBindTexture(GL_TEXTURE_2D, m_roofTexture);
     glBegin(GL_POLYGON);
     {
@@ -171,7 +171,7 @@ void Cottage::Draw() const
     }
     glEnd();
 
-    // Окно справа
+    // РћРєРЅРѕ СЃРїСЂР°РІР°
     glBindTexture(GL_TEXTURE_2D, m_windowTexture);
     glBegin(GL_POLYGON);
     {
@@ -184,7 +184,7 @@ void Cottage::Draw() const
     }
     glEnd();
 
-    // Окно слева
+    // РћРєРЅРѕ СЃР»РµРІР°
     glBindTexture(GL_TEXTURE_2D, m_windowTexture);
     glBegin(GL_POLYGON);
     {
@@ -197,7 +197,7 @@ void Cottage::Draw() const
     }
     glEnd();
 
-    // Окно сзади
+    // РћРєРЅРѕ СЃР·Р°РґРё
     glBindTexture(GL_TEXTURE_2D, m_windowTexture);
     glBegin(GL_POLYGON);
     {
@@ -211,7 +211,7 @@ void Cottage::Draw() const
     glEnd();
 
 
-    // Дверь
+    // Р”РІРµСЂСЊ
     glBindTexture(GL_TEXTURE_2D, m_doorTexture);
     glBegin(GL_POLYGON);
     {

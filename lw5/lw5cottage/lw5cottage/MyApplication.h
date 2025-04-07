@@ -48,7 +48,7 @@ private:
 	// Точечный источник света
 	COmniLight m_light;
 
-	// коттедж++
+	// коттедж++ 
 	Cottage m_cottage;
 	Garage m_garage;
 	Fence m_fence;

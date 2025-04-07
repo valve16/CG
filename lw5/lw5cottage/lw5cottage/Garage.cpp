@@ -16,9 +16,9 @@ void Garage::Draw() const
 {
     glEnable(GL_TEXTURE_2D);
 
-    // Стены
+    // РЎС‚РµРЅС‹
     glBindTexture(GL_TEXTURE_2D, m_brickTexture);
- //передняя стена
+ //РїРµСЂРµРґРЅСЏСЏ СЃС‚РµРЅР°
     glBegin(GL_POLYGON);
     {
         CVector3f p0(-m_width / 2, m_depth / 2, 0);
@@ -39,7 +39,7 @@ void Garage::Draw() const
     }
     glEnd();
 
-    //задняя стена
+    //Р·Р°РґРЅСЏСЏ СЃС‚РµРЅР°
     glBegin(GL_POLYGON);
     {
         CVector3f p0(-m_width / 2, -m_depth / 2, 0);
@@ -60,7 +60,7 @@ void Garage::Draw() const
     }
     glEnd();
 
-    //справа от входа
+    //СЃРїСЂР°РІР° РѕС‚ РІС…РѕРґР°
     glBegin(GL_POLYGON);
     {
         CVector3f p0(-m_width / 2, -m_depth / 2, 0);
@@ -79,7 +79,7 @@ void Garage::Draw() const
         glTexCoord2f(1, 1); glVertex3fv(p2);
 
         //  p0, p2, p3
-        float texV3 = 3.5f / m_height; // Пропорция для p3
+        float texV3 = 3.5f / m_height; // РџСЂРѕРїРѕСЂС†РёСЏ РґР»СЏ p3
         glNormal3fv(normal);
         glTexCoord2f(0, 0); glVertex3fv(p0);
         glTexCoord2f(1, 1); glVertex3fv(p2);
@@ -89,7 +89,7 @@ void Garage::Draw() const
 
 
 
-    //слева от входа
+    //СЃР»РµРІР° РѕС‚ РІС…РѕРґР°
     glBegin(GL_POLYGON);
     {
         CVector3f p0(m_width / 2, -m_depth / 2, 0);
@@ -116,7 +116,7 @@ void Garage::Draw() const
     }
     glEnd();
 
-    // Крыша
+    // РљСЂС‹С€Р°
     glBindTexture(GL_TEXTURE_2D, m_roofTexture);
     glBegin(GL_QUADS);
     {
@@ -138,7 +138,7 @@ void Garage::Draw() const
     }
     glEnd();
 
-    // Окно
+    // РћРєРЅРѕ
     glBindTexture(GL_TEXTURE_2D, m_windowTexture);
     glBegin(GL_QUADS);
     {
@@ -160,7 +160,7 @@ void Garage::Draw() const
     }
     glEnd();
 
-    // ворота
+    // РІРѕСЂРѕС‚Р°
     glBindTexture(GL_TEXTURE_2D, m_garageDoorTexture);
     glBegin(GL_POLYGON);
     {

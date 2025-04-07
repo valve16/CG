@@ -13,7 +13,7 @@ void Fence::Draw() const
 {
     glBindTexture(GL_TEXTURE_2D, m_texture);
 
-    // лицевая сторона
+    // Р»РёС†РµРІР°СЏ СЃС‚РѕСЂРѕРЅР° 
     glBegin(GL_QUADS);
     {
         CVector3f p0(-m_length / 2, 0, 0);
@@ -32,7 +32,7 @@ void Fence::Draw() const
         glTexCoord2f(0, 1); glVertex3fv(p3);
     }
     glEnd();
-     //обратная сторона
+     //РѕР±СЂР°С‚РЅР°СЏ СЃС‚РѕСЂРѕРЅР°
     glBegin(GL_QUADS);
     {
         CVector3f p0(-m_length / 2, 0, 0);
