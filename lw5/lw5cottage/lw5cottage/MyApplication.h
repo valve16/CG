@@ -1,5 +1,4 @@
 #pragma once
-#include "../libgl/AnimationController.h"
 #include "../libgl/GLApplication.h"
 #include "../libgl/OmniLight.h"
 #include "../libgl/RotationController.h"
@@ -28,7 +27,7 @@ protected:
 private:
 	// Рисуем космос
 	void DrawSkyBox() const;
-	// Рисуем землю
+
 	void DrawCottage() const;
 	// Угол обзора по вертикали
 	static const double FIELD_OF_VIEW;
@@ -43,7 +42,7 @@ private:
 
 	// Контроллеры вращения и анимации
 	CRotationController m_rotationController;
-	CAnimationController m_animationController;
+	//CAnimationController m_animationController;
 
 	// Точечный источник света
 	COmniLight m_light;

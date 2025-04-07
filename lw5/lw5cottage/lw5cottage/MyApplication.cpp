@@ -178,9 +178,9 @@ void CMyApplication::DrawSkyBox() const
 
 void CMyApplication::OnIdle()
 {
-	m_animationController.Tick();
-	PostRedisplay();
-	Sleep(10);
+	//m_animationController.Tick();
+	//PostRedisplay();
+	//Sleep(10);
 }
 
 void CMyApplication::OnReshape(int width, int height)
