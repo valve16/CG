@@ -140,7 +140,7 @@ void CModelLoader::Load3dsFile(const char * fileName, CModel & model)
 {
 	// Открываем файл
 	CFile3ds file(fileName);
-
+	
 	// Опеределяем путь к каталогу с .3ds файлом.
 	// Он понадобится для поиска текстур
 	std::string filePath = fileName;
@@ -152,6 +152,7 @@ void CModelLoader::Load3dsFile(const char * fileName, CModel & model)
 	std::string fileFolder = 
 		(slashPos == std::string::npos) ? "" :
 		filePath.substr(0, slashPos + 1);
+	//std::cout << fileFolder << "\n";
 
 	// Загружаем материалы
 	LoadMaterials(file.GetFile(), model, fileFolder);
@@ -738,7 +739,8 @@ unsigned CModelLoader::FillVertexBufferData(
 void CModelLoader::LoadMaterials(Lib3dsFile const& file, CModel & model, std::string const& baseFolder)
 {
 	const int materialsCount = file.nmaterials;
-
+	//std::cout << materialsCount;
+	//std::cout << file.name << " " << materialsCount << "\n";
 	for (int i = 0; i < materialsCount; ++i)
 	{
 		Lib3dsMaterial const * pMaterial = file.materials[i];
@@ -772,6 +774,7 @@ void CModelLoader::LoadMaterials(Lib3dsFile const& file, CModel & model, std::st
 		}
 
 		// Загружаем текстуры материала
+		
 		LoadMaterialTextures(*pMaterial, model, material, baseFolder);
 	}
 }
@@ -785,12 +788,77 @@ void CModelLoader::LoadMaterialTextures(
 	// Пытаемся загрузить текстурную карту №1
 	{
 		Lib3dsTextureMap const & tex1 = materialInfo.texture1_map;
-
+		
+		//if (*materialInfo.texture1_map.name) {
+		//	std::cout << baseFolder << " ";
+		//	std::cout << "  Texture1: " << materialInfo.texture1_map.name << "\n";
+		//}	
+		//if (*materialInfo.texture2_map.name) {
+		//	std::cout << baseFolder << " ";
+		//	std::cout << "  Texture2: " << materialInfo.texture2_map.name << "\n";
+		//}	if (*materialInfo.texture2_mask.name) {
+		//	std::cout << baseFolder << " ";
+		//	std::cout << "  Texture mask2: " << materialInfo.texture2_map.name << "\n";
+		//}
+		//if (*materialInfo.texture1_mask.name) {
+		//	std::cout << baseFolder << " ";
+		//	std::cout << "  Texture mask: " << materialInfo.texture1_mask.name << "\n";
+		//}
+		//if (*materialInfo.bump_map.name) {
+		//	std::cout << baseFolder << " ";
+		//	std::cout << "  BumpMap: " << materialInfo.bump_map.name << "\n";
+		//}
+		//if (*materialInfo.specular_map.name) {
+		//	std::cout << baseFolder << " ";
+		//	std::cout << "  SpecularMap: " << materialInfo.specular_map.name << "\n";
+		//}
+		//if (*materialInfo.opacity_map.name) {
+		//	std::cout << baseFolder << " ";
+		//	std::cout << "  OpacityMap: " << materialInfo.opacity_map.name << "\n";
+		//}	
+		//if (*materialInfo.opacity_mask.name) {
+		//	std::cout << baseFolder << " ";
+		//	std::cout << "  OpacityMask: " << materialInfo.opacity_mask.name << "\n";
+		//}
+		//if (*materialInfo.bump_mask.name) {
+		//	std::cout << baseFolder << " ";
+		//	std::cout << "  BumpMask: " << materialInfo.bump_mask.name << "\n";
+		//}		
+		//if (*materialInfo.specular_mask.name) {
+		//	std::cout << baseFolder << " ";
+		//	std::cout << "  SpecMask: " << materialInfo.specular_mask.name << "\n";
+		//}		
+		//if (*materialInfo.specular_map.name) {
+		//	std::cout << baseFolder << " ";
+		//	std::cout << "  SpecMap: " << materialInfo.specular_map.name << "\n";
+		//}		
+		//if (*materialInfo.shininess_mask.name) {
+		//	std::cout << baseFolder << " ";
+		//	std::cout << "  shininess_mask: " << materialInfo.shininess_mask.name << "\n";
+		//}		
+		//if (*materialInfo.self_illum_map.name) {
+		//	std::cout << baseFolder << " ";
+		//	std::cout << "  self_illum_map: " << materialInfo.self_illum_map.name << "\n";
+		//}		
+		//if (*materialInfo.self_illum_mask.name) {
+		//	std::cout << baseFolder << " ";
+		//	std::cout << "  self_illum_mask: " << materialInfo.self_illum_mask.name << "\n";
+		//}		
+		//if (*materialInfo.reflection_map.name) {
+		//	std::cout << baseFolder << " ";
+		//	std::cout << "  reflection_map: " << materialInfo.reflection_map.name << "\n";
+		//}		
+		//if (*materialInfo.reflection_mask.name) {
+		//	std::cout << baseFolder << " ";
+		//	std::cout << "  reflection_mask: " << materialInfo.reflection_mask.name << "\n";
+		//}
 		// Проверяем, есть ли имя у первой текстуры?
 		if (*tex1.name)
 		{
+			//std::cout << "Texture1: " << tex1.name << "\n";
 			try
 			{
+				//std::cout << tex1.name << "\n";
 				// Загружаем текстуру
 				CTexture2DHandle texture1 = 
 					LoadTexture(tex1.name, model, baseFolder);
@@ -801,6 +869,7 @@ void CModelLoader::LoadMaterialTextures(
 			}
 			catch (std::runtime_error const&)
 			{
+				
 				if (!m_ignoreMissingTextures)
 				{
 					throw;
@@ -828,6 +897,7 @@ void CModelLoader::LoadMaterialTextures(
 GLuint CModelLoader::LoadTexture(std::string const & name, CModel & model, std::string const& baseFolder)
 {
 	// Добавляем текстуру с заданным именем к модели
+	//std::cout << name << " " << baseFolder << "\n";
 	CTexture2D & texture = model.AddTextureImage(name);
 	// Нам вернут либо ссылку на существующий текстурный объект,
 	// либо ссылку на вновь созданный
@@ -837,11 +907,12 @@ GLuint CModelLoader::LoadTexture(std::string const & name, CModel & model, std::
 		CTextureLoader loader;
 
 		std::string textureFilePath = baseFolder + name;
-
+		//std::cout << textureFilePath << "\n";
 		// Загружаем текстурное изображение и присоединяем его к текстуре
 		// Из-за простейшего перевода имени из string в wstring 
 		// корректно загружаться будут только файлы, в пути которых не содержатся 
 		// символы за пределами кодовой таблицы ASCII
+
 		texture.Attach(
 			loader.LoadTexture2D(
 				std::wstring(textureFilePath.begin(), 

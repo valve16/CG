@@ -60,7 +60,7 @@ CTexture2D & CModel::AddTextureImage(std::string const& name)
 	CTextures::iterator it = m_textures.find(name);
 	if (it != m_textures.end())
 	{
-		// Если есть, возвращаем ссылку на существующую
+	   // Если есть, возвращаем ссылку на существующую
 		return *it->second;
 	}
 

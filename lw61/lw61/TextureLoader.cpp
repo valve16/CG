@@ -40,12 +40,14 @@ GLuint CTextureLoader::LoadTexture2D(std::wstring const& fileName, GLuint textur
 {
 	// Загружаем изображение при помощи GDI+
 	Gdiplus::Bitmap bmp(fileName.c_str());
-
+	//std::wcout << fileName << "\n";
 	if (bmp.GetLastStatus() != Gdiplus::Ok)
 	{
+		//std::wcout << fileName << "\n";
 		std::string name;
 		size_t size;
 		name.resize(fileName.length());
+
 		wcstombs_s(&size, &name[0], name.size() + 1, fileName.c_str(), fileName.size());
 	}
 
