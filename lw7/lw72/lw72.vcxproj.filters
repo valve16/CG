@@ -19,7 +19,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="lw71.cpp">
+    <ClCompile Include="09_simple_geometry_shader.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="GDIPlusInitializer.cpp">
@@ -41,6 +41,9 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="lw72.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
