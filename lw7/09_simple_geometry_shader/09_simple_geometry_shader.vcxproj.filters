@@ -78,9 +78,6 @@
     <None Include="shaders\fragment_shader.fsh">
       <Filter>shaders</Filter>
     </None>
-    <None Include="shaders\geometry_shader.gsh">
-      <Filter>shaders</Filter>
-    </None>
     <None Include="shaders\vertex_shader.vsh">
       <Filter>shaders</Filter>
     </None>

@@ -167,9 +167,6 @@
     <None Include="shaders\fragment_shader.fsh" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\geometry_shader.gsh">
-      <FileType>Document</FileType>
-    </None>
     <None Include="shaders\vertex_shader.vsh">
       <FileType>Document</FileType>
     </None>

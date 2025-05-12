@@ -75,9 +75,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="shaders\fragment_shader1.fsh">
-      <Filter>shaders</Filter>
-    </None>
     <None Include="shaders\vertex_shader.vsh">
       <Filter>shaders</Filter>
     </None>

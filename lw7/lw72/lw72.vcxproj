@@ -164,7 +164,6 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="shaders\fragment_shader.fsh" />
-    <None Include="shaders\fragment_shader1.fsh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\vertex_shader.vsh">

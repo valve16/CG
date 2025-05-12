@@ -72,7 +72,7 @@ void CMyApplication::OnDisplay()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	// Активируем шейдерную программу и задаем значения ее uniform-переменных
+	// Активируем шейдерную программу 
 	glUseProgram(m_program);
 
 	glBegin(GL_LINE_STRIP);

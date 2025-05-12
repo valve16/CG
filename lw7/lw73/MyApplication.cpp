@@ -71,9 +71,6 @@ void CMyApplication::InitShaders()
 
 void CMyApplication::OnDisplay()
 {
-
-
-
 	//glClearColor(0.3f, 0.4f, 0.5f, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -83,14 +80,14 @@ void CMyApplication::OnDisplay()
 	glUniform1f(m_timeLocation, m_time);
 
 	// Параметры сетки
-	const int gridCount = 50;
-	const float step = 4.0f / gridCount;
+	const int gridCount = 20;
+	const float step = 2.0f / gridCount;
 
 	for (int i = 0; i < gridCount; ++i) {
 		glBegin(GL_QUAD_STRIP);
 		for (int j = 0; j <= gridCount; ++j) {
-			float x = -2.0f + j * step;
-			float y = -2.0f + i * step;
+			float x = -1.0f + j * step;
+			float y = -1.0f + i * step;
 
 			glVertex3f(x, y, 0.0f);
 			glVertex3f(x, y + step, 0.0f);
