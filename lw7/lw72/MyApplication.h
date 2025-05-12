@@ -18,6 +18,12 @@ private:
 
 private:
 	// Шейдерные объекты
+	static const double FIELD_OF_VIEW;
+
+	// Расстояние до ближней и дальней плоскостей отсечения
+	static const double ZNEAR;
+	static const double ZFAR;
+
 	CProgram m_program;
 	CShader m_vertexShader;
 	CShader m_fragmentShader;

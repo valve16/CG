@@ -75,10 +75,10 @@ void CMyApplication::OnDisplay()
 	glUseProgram(m_program);
 	glBegin(GL_LINE_STRIP);
 	float step = M_PI / 1000.0f;
-	int numPoints = static_cast<int>(2.0f * M_PI / step) + 1; // ≈ 2000 points
-	for (int i = 0; i < numPoints; ++i)
+	float numPoints = (2.0f * M_PI / step) + 1;
+	for (float i = 0; i < numPoints; ++i)
 	{
-		float x = i * step; // x from 0 to 2π
+		float x = i * step; 
 		glVertex3f(x, 0.0f, 0.0f);
 	}
 	glEnd();
@@ -93,8 +93,15 @@ void CMyApplication::OnReshape(int width, int height)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(-3.0, 3.0,
-			-3.0, 3.0,
-			-1.0, 1.0); // Widened to show full curve
+
+	double aspect = (double)width / height;
+	double viewHeight = 2;
+	double viewWidth = aspect * viewHeight;
+
+	glOrtho(
+		-viewWidth , +viewWidth,
+		-viewHeight , +viewHeight ,
+		-1, 1);
+
 	glMatrixMode(GL_MODELVIEW);
 }

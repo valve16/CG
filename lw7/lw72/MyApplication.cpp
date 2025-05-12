@@ -4,6 +4,12 @@
 #include "ShaderCompiler.h"
 #include "ShaderLoader.h"
 
+const double CMyApplication::ZNEAR = 0.1;
+// Расстояние до дальей плоскости отсечения отображаемого объема
+const double CMyApplication::ZFAR = 200;
+// Угол обзора по вертикалиa
+const double CMyApplication::FIELD_OF_VIEW = 70;
+
 CMyApplication::CMyApplication(const char* title, int width, int height)
 	: CGLApplication(title, width, height)
 {
@@ -60,21 +66,31 @@ void CMyApplication::InitShaders()
 
 void CMyApplication::OnDisplay()
 {
+	glClearColor(0.3f, 0.4f, 0.5f, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	// Activate shader program
+
+	//glEnable(GL_TEXTURE_2D);
 	glUseProgram(m_program);
 
-	// Draw a rectangle from (0,0) to (2,2)
 	glBegin(GL_QUADS);
-	glVertex2f(-1.0f, -1.0f);
-	glVertex2f(1.0f, -1.0f);
-	glVertex2f(1.0f, 1.0f);
-	glVertex2f(-1.0f, 1.0f);
+	{
+		glTexCoord2f(0, 0);
+		glVertex2f((GLfloat)(-0.8), (GLfloat)(-0.4));
+
+		glTexCoord2f(2, 0);
+		glVertex2f((GLfloat)(0.8), (GLfloat)(-0.4));
+
+		glTexCoord2f(2, 1);
+		glVertex2f((GLfloat)(0.8), (GLfloat)(0.4));
+
+		glTexCoord2f(0, 1);
+		glVertex2f((GLfloat)(-0.8), (GLfloat)(0.4));
+	}
 	glEnd();
 
-	// Switch back to fixed pipeline
 	glUseProgram(0);
+
 }
 
 
@@ -84,17 +100,15 @@ void CMyApplication::OnReshape(int width, int height)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	//glOrtho(-3.0, 3.0,
-	//		-3.0, 3.0,
-	//		-1.0, 1.0); // Widened to show full curve
-	float aspect = (float)width / height;
-	if (aspect > 2.0f) {
-		float w = 2.0f * aspect;
-		glOrtho(-w / 2, w / 2, -1.0, 1.0, -1.0, 1.0);
-	}
-	else {
-		float h = 1.0f / (aspect / 2.0f);
-		glOrtho(-1.0, 1.0, -h / 2, h / 2, -1.0, 1.0);
-	}
+
+	double aspect = (double)width / height;
+	double viewHeight = 2;
+	double viewWidth = aspect * viewHeight;
+
+	glOrtho(
+		-viewWidth / 2, +viewWidth / 2,
+		-viewHeight / 2, +viewHeight / 2,
+		-1, 1);
+
 	glMatrixMode(GL_MODELVIEW);
 }
