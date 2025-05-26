@@ -3,6 +3,7 @@
 #include "ProgramLinker.h"
 #include "ShaderCompiler.h"
 #include "ShaderLoader.h"
+#include "TextureLoader.h"
 
 const double CMyApplication::ZNEAR = 0.1;
 // Расстояние до дальей плоскости отсечения отображаемого объема
@@ -22,9 +23,20 @@ CMyApplication::~CMyApplication(void)
 void CMyApplication::OnInit()
 {
 	InitShaders();
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	InitTextures();
+	//glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
+void CMyApplication::InitTextures()
+{
+	// Загружаем текстуру
+	CTextureLoader loader;
+	loader.BuildMipmaps(true);
+	loader.SetMagFilter(GL_LINEAR);
+	loader.SetMinFilter(GL_LINEAR_MIPMAP_LINEAR);
+	m_texture1 = loader.LoadTexture2D(L"car.jpg");
+	m_texture2 = loader.LoadTexture2D(L"photo.jpg");
+}
 
 void CMyApplication::InitShaders()
 {
@@ -61,36 +73,56 @@ void CMyApplication::InitShaders()
 
 	// Получаем расположение uniform-переменных, используемых в
 	// шейдерной программе
-	m_sizeLocation = m_program.GetUniformLocation("Size");
+	m_timeLocation = m_program.GetUniformLocation("Time");
+	m_textureMap1Location = m_program.GetUniformLocation("TextureMap1");
+	m_textureMap2Location = m_program.GetUniformLocation("TextureMap2");
 }
 
 void CMyApplication::OnDisplay()
 {
-	glClearColor(0.3f, 0.4f, 0.5f, 1);
+	glClearColor(0.5f, 0.5f, 0.5f, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-
-	//glEnable(GL_TEXTURE_2D);
 	glUseProgram(m_program);
+	if (m_textureMap1Location >= 0)
+	{
+		// задаем номер текстурного модуля 0 для использования дискретизатором
+		// TextureMap
+		glUniform1i(m_textureMap1Location, 0);
+	}
+	if (m_textureMap2Location >= 0)
+	{
+		// задаем номер текстурного модуля 1 для использования дискретизатором
+		// TextureMap
+		glUniform1i(m_textureMap2Location, 1);
+	}
+
+	glUniform1f(m_timeLocation, m_time);
+
+	glEnable(GL_TEXTURE_2D);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_texture1);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, m_texture2);
 
 	glBegin(GL_QUADS);
 	{
-		glTexCoord2f(0, 0);
-		glVertex2f((GLfloat)(-0.8), (GLfloat)(-0.4));
-
-		glTexCoord2f(2, 0);
-		glVertex2f((GLfloat)(0.8), (GLfloat)(-0.4));
-
-		glTexCoord2f(2, 1);
-		glVertex2f((GLfloat)(0.8), (GLfloat)(0.4));
-
 		glTexCoord2f(0, 1);
-		glVertex2f((GLfloat)(-0.8), (GLfloat)(0.4));
+		glVertex2f((GLfloat)(-0.8), (GLfloat)(-0.8));
+
+		glTexCoord2f(1, 1);
+		glVertex2f((GLfloat)(0.8), (GLfloat)(-0.8));
+
+		glTexCoord2f(1, 0);
+		glVertex2f((GLfloat)(0.8), (GLfloat)(0.8));
+
+		glTexCoord2f(0, 0);
+		glVertex2f((GLfloat)(-0.8), (GLfloat)(0.8));
 	}
 	glEnd();
 
 	glUseProgram(0);
-
 }
 
 
@@ -111,4 +143,17 @@ void CMyApplication::OnReshape(int width, int height)
 		-1, 1);
 
 	glMatrixMode(GL_MODELVIEW);
+}
+
+void CMyApplication::OnIdle()
+{
+	DWORD currentTick = GetTickCount();
+	float deltaTime = (currentTick - g_lastTick) / 1000.0f;
+	g_lastTick = currentTick;
+	m_time += deltaTime * 0.3;
+	if (m_time >= 1.0f)
+	{
+		m_time = 0.0f;
+	}
+	glutPostRedisplay();
 }
